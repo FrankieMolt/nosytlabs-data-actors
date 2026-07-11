@@ -1,0 +1,47 @@
+{
+ "generated_at": 1783807686,
+ "ok": 8,
+ "failed": 0,
+ "actors": {
+  "coingecko-market-data": {
+   "status": "ok",
+   "count": 21,
+   "sample": "global_market_data"
+  },
+  "crypto-fear-greed-index": {
+   "status": "ok",
+   "count": 1,
+   "sample": "24"
+  },
+  "crypto-news-aggregator": {
+   "status": "ok",
+   "count": 10,
+   "sample": "FOMC minutes, SpaceX joins Nasdaq 100: Crypto Week Ahead"
+  },
+  "base-mempool-monitor": {
+   "status": "ok",
+   "count": 0,
+   "sample": ""
+  },
+  "defi-llama-yields": {
+   "status": "ok",
+   "count": 200,
+   "sample": "STETH"
+  },
+  "defi-tvl-monitor": {
+   "status": "ok",
+   "count": 10,
+   "sample": "BNB"
+  },
+  "ethereum-gas-tracker": {
+   "status": "ok",
+   "count": 2,
+   "sample": "ethereum"
+  },
+  "polymarket-data": {
+   "status": "ok",
+   "count": 5,
+   "sample": "New Rihanna Album before GTA VI?"
+  }
+ }
+}
