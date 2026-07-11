@@ -1,36 +1,65 @@
-# NosytLabs Data Actors
+# NosytLabs — Crypto Data Feeds
 
-8 production-grade Apify actors for crypto, DeFi, on-chain, and prediction-market data — live JSON feeds + pay-per-run pricing.
+Free, live JSON feeds for crypto markets, DeFi, on-chain activity, and
+prediction-market data. Powered by **direct public APIs** — no API key,
+no account, no rate-limit wall.
 
-## Actors (click to open in Apify Store)
-| Actor | Store | Price/run | Feeds |
-|---|---|---|---|
-| CoinGecko Market Data | [apify.com/nosytlabs/coingecko-market-data](https://apify.com/nosytlabs/coingecko-market-data) | $0.35 | markets, trending, categories, exchanges, global |
-| Crypto Fear & Greed Index | [apify.com/nosytlabs/crypto-fear-greed-index](https://apify.com/nosytlabs/crypto-fear-greed-index) | $0.25 | sentiment 0–100 + history |
-| Crypto News Aggregator | [apify.com/nosytlabs/crypto-news-aggregator](https://apify.com/nosytlabs/crypto-news-aggregator) | $0.30 | CoinDesk / Cointelegraph / CryptoSlate |
-| Base Mempool Monitor | [apify.com/nosytlabs/base-mempool-monitor](https://apify.com/nosytlabs/base-mempool-monitor) | $0.40 | pending tx, gas, blocks (Base) |
-| DeFiLlama Yields | [apify.com/nosytlabs/defi-llama-yields](https://apify.com/nosytlabs/defi-llama-yields) | $0.35 | APY / TVL / risk by pool |
-| DeFi TVL Monitor | [apify.com/nosytlabs/defi-tvl-monitor](https://apify.com/nosytlabs/defi-tvl-monitor) | $0.35 | protocol TVL, 24h/7d, chains |
-| Ethereum Gas Tracker | [apify.com/nosytlabs/ethereum-gas-tracker](https://apify.com/nosytlabs/ethereum-gas-tracker) | $0.25 | ETH / Base / Arbitrum gwei |
-| Polymarket Data | [apify.com/nosytlabs/polymarket-data](https://apify.com/nosytlabs/polymarket-data) | $0.30 | markets, odds, volume, events |
+## Live feeds (free, no key required)
 
-## Live demos (no API key)
 - **Landing page:** https://lethometry.com/actors
 - **All feeds (aggregated):** https://lethometry.com/actors/api/all
-- **Per-actor feed:** `https://lethometry.com/actors/api/<slug>`
+- **Per feed:** `https://lethometry.com/actors/api/<slug>`
 
-Each live feed shows the latest successful run's dataset items — proof the actors work before you buy a run.
+Feeds (slug): `coingecko-market-data`, `crypto-fear-greed-index`,
+`crypto-news-aggregator`, `base-mempool-monitor`, `defi-llama-yields`,
+`defi-tvl-monitor`, `ethereum-gas-tracker`, `polymarket-data`.
 
-## Self-host the feed server
+Each feed returns **real data** pulled directly from its primary public
+source and cached for 10 minutes:
+
+| Feed | Source |
+|------|--------|
+| coingecko-market-data | CoinGecko API |
+| crypto-fear-greed-index | alternative.me |
+| crypto-news-aggregator | Cointelegraph RSS |
+| base-mempool-monitor | Base public RPC |
+| defi-llama-yields | DeFiLlama yields API |
+| defi-tvl-monitor | DeFiLlama TVL API |
+| ethereum-gas-tracker | ETH + Base public RPC |
+| polymarket-data | Polymarket gamma API |
+
+## Architecture
+
+- `sources.py` — one real fetcher per feed (direct APIs, with fallbacks)
+- `server.py` — stdlib HTTP server on `:8099`; serves the landing page
+  and `/actors/api/*`, proxies WordPress (`:8081`) for `/`
+- `consume.py` — writes `snapshot.json` for agent ingestion
+- `digest.py` — generates `digest.md` / `digest.json` (OMA-AI brief)
+- `run_pipeline.py` — cron entry (every 30 min); silent on success,
+  alerts on failure / stale snapshot
+- `omai-feeds.service` — systemd unit (in repo + `/etc/systemd/system`)
+
+## Apify actors (optional paid wrapper)
+
+8 `nosytlabs/*` actors on Apify mirror these feeds as pay-per-run actors
+($0.25–$0.40/run). They are a **separate monetization layer** and are
+**NOT required** for the live feeds above.
+
+> ⚠️ The Apify account is currently on the **FREE plan**, which blocks
+> paid runs (`403 Monthly usage hard limit exceeded`, `PAID_ACTORS`
+> feature disabled). Paid runs require upgrading the Apify plan
+> (e.g. Starter). The free live feeds work regardless of Apify status.
+
+## Self-host
+
 ```bash
 cd omai_feeds
-export APIFY_TOKEN=your_token   # for live Apify pulls
-python3 server.py               # serves :8099
+python3 server.py            # serves :8099 — no token needed
 ```
-`server.py` is stdlib-only. It serves the landing page, proxies WordPress, and exposes the live JSON feeds (10-min cache). Run behind a Cloudflare tunnel or reverse proxy.
+Run behind a Cloudflare tunnel or reverse proxy. The feed needs no
+external credentials.
 
 ## OMA-AI consumer
-`consume.py` pulls `/actors/api/all` into `snapshot.json` for agent ingestion. Wire it into a cron (e.g. every 30 min).
 
-## Pricing
-All actors are **pay per run** — you only pay when the actor runs. No monthly commitment.
+`consume.py` pulls `/actors/api/all` into `snapshot.json`. Wire it into a
+cron (every 30 min) via `run_pipeline.py`.
