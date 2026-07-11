@@ -23,73 +23,77 @@ def summarize(snap):
     out = {"generated_at": snap.get("generated_at"), "signals": []}
 
     # Fear & Greed
-    fg = feeds.get("crypto-fear-greed-index", {}).get("data")
-    if fg and isinstance(fg, list) and fg:
-        v = fg[0]
-        val = v.get("value")
-        cls = v.get("valueClassification", "")
+    fg = feeds.get("crypto-fear-greed-index", {})
+    if "error" not in fg and "value" in fg:
         out["signals"].append({
-            "signal": "fear_greed", "value": val, "label": cls,
-            "note": f"Sentiment: {val} ({cls})"
+            "signal": "fear_greed", "value": fg["value"], "label": fg["classification"],
+            "note": f"Sentiment: {fg['value']} ({fg['classification']})"
         })
 
-    # Gas (per-chain records — chains depend on what the actor returns)
-    gas = feeds.get("ethereum-gas-tracker", {}).get("data")
-    if gas and isinstance(gas, list) and gas:
-        by = {g.get("chain"): g for g in gas}
-        def gw(ch):
-            g = by.get(ch)
-            return round(g.get("fast_gwei"), 2) if g and g.get("fast_gwei") is not None else None
-        parts = []
-        for ch in ("ethereum", "base", "arbitrum", "polygon", "optimism"):
-            v = gw(ch)
-            if v is not None:
-                parts.append(f"{ch[:3].upper()}:{v}")
+    # Gas
+    g = feeds.get("ethereum-gas-tracker", {})
+    if "error" not in g and "eth_gwei" in g:
         out["signals"].append({
-            "signal": "gas", "chains": {c: gw(c) for c in by},
-            "note": "Gas gwei — " + (" ".join(parts) if parts else "no data")
+            "signal": "gas", "eth": g["eth_gwei"], "base": g["base_gwei"],
+            "note": f"Gas gwei — ETH:{g['eth_gwei']} BAS:{g['base_gwei']}"
         })
 
     # CoinGecko global
-    cg = feeds.get("coingecko-market-data", {}).get("data")
-    if cg and isinstance(cg, list):
-        for rec in cg:
-            if rec.get("type") == "global_market_data":
-                mc = rec.get("total_market_cap", {})
-                out["signals"].append({
-                    "signal": "global_mcap_usd", "value": mc.get("usd"),
-                    "note": f"Total crypto mcap: ${mc.get('usd',0)/1e9:.1f}B"
-                })
-                break
-
-    # Polymarket top markets by volume
-    pm = feeds.get("polymarket-data", {}).get("data")
-    if pm and isinstance(pm, list):
-        top = sorted(pm, key=lambda x: x.get("volume", 0) or 0, reverse=True)[:3]
+    cg = feeds.get("coingecko-market-data", {})
+    if "error" not in cg and "global_mcap_usd" in cg:
         out["signals"].append({
-            "signal": "polymarket_top",
-            "markets": [{"q": m.get("question"), "vol": m.get("volume")} for m in top],
-            "note": "Top Polymarket: " + ", ".join(m.get("question","")[:40] for m in top)
+            "signal": "global_mcap_usd", "value": cg["global_mcap_usd"],
+            "btc_dom": cg.get("btc_dominance"),
+            "note": f"Total crypto mcap: ${cg['global_mcap_usd']/1e9:.1f}B  BTC-dom {cg.get('btc_dominance'):.1f}%"
         })
 
-    # DeFi TVL top movers
-    tvl = feeds.get("defi-tvl-monitor", {}).get("data")
-    if tvl and isinstance(tvl, list):
+    # Polymarket top markets by volume
+    pm = feeds.get("polymarket-data", {})
+    if "error" not in pm and "top_markets" in pm:
+        top = pm["top_markets"][:3]
         out["signals"].append({
-            "signal": "defi_tvl_protocols", "count": len(tvl),
-            "note": f"DeFi TVL tracked: {len(tvl)} protocols"
+            "signal": "polymarket_top",
+            "markets": [{"q": m["question"], "vol": m["volume"]} for m in top],
+            "note": "Top Polymarket: " + ", ".join(m["question"][:40] for m in top)
+        })
+
+    # DeFi TVL total
+    tvl = feeds.get("defi-tvl-monitor", {})
+    if "error" not in tvl and "total_tvl_usd" in tvl:
+        out["signals"].append({
+            "signal": "defi_tvl", "total_usd": tvl["total_tvl_usd"],
+            "top_chain": tvl["top_chains"][0]["name"],
+            "note": f"DeFi TVL: ${tvl['total_tvl_usd']/1e9:.1f}B  top={tvl['top_chains'][0]['name']}"
+        })
+
+    # DeFi yields top
+    y = feeds.get("defi-llama-yields", {})
+    if "error" not in y and "top_yields" in y:
+        t = y["top_yields"][0]
+        out["signals"].append({
+            "signal": "defi_yield_top",
+            "note": f"Top yield: {t['project']} ({t['chain']}) {t['apy']}% APY"
         })
 
     # News headlines
-    news = feeds.get("crypto-news-aggregator", {}).get("data")
-    if news and isinstance(news, list):
-        headlines = [n.get("title") for n in news[:5] if n.get("title")]
+    news = feeds.get("crypto-news-aggregator", {})
+    if "error" not in news and "headlines" in news:
+        hl = news["headlines"][:5]
         out["signals"].append({
-            "signal": "news", "headlines": headlines,
-            "note": f"{len(news)} headlines; top: " + (headlines[0] if headlines else "n/a")
+            "signal": "news", "headlines": hl,
+            "note": f"{len(hl)} headlines; top: " + (hl[0] if hl else "n/a")
         })
 
-    out["feed_counts"] = {k: v.get("count") for k, v in feeds.items()}
+    # Mempool (Base gas/block)
+    mp = feeds.get("base-mempool-monitor", {})
+    if "error" not in mp and "gas_gwei" in mp:
+        out["signals"].append({
+            "signal": "base_mempool", "gas": mp["gas_gwei"], "block": mp["latest_block"],
+            "note": f"Base: gas {mp['gas_gwei']} gwei, block {mp['latest_block']}"
+        })
+
+    out["feed_counts"] = {k: ("error" if "error" in v else "ok")
+                           for k, v in feeds.items()}
     return out
 
 def to_md(s):

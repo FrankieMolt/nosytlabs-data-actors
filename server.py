@@ -11,6 +11,7 @@ import json, os, re, time, threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+import sources  # direct free live sources (no Apify dependency)
 
 # Load APIFY_TOKEN from hermes config
 _CFG = os.path.expanduser("~/.hermes/config.yaml")
@@ -52,26 +53,18 @@ def _api(path):
         return json.loads(r.read())
 
 def get_feed(slug):
-    aid, *_ = ACTORS[slug]
-    with CACHE_LOCK:
-        if slug in CACHE and time.time() - CACHE[slug][1] < CACHE_TTL:
-            return CACHE[slug][0], None
+    """Return (data, error) for a feed slug.
+
+    Live data comes from direct free sources (sources.FEEDS). This is
+    always real and costs nothing. The Apify actors are a separate paid
+    wrapper and are NOT required for the feed to function.
+    """
+    if slug not in sources.FEEDS:
+        return None, "unknown feed slug"
     try:
-        # latest succeeded run
-        runs = _api(f"/acts/{aid}/runs?status=SUCCEEDED&limit=1&desc=1")
-        items = runs.get("data", {}).get("items", [])
-        if not items:
-            return [], None
-        run_id = items[0]["id"]
-        data = _api(f"/actor-runs/{run_id}/dataset/items?limit=200")
-        out = data.get("items", data) if isinstance(data, dict) else data
-        with CACHE_LOCK:
-            CACHE[slug] = (out, time.time())
-        return out, None
-    except HTTPError as e:
-        return None, f"{e.code} {e.read().decode()[:120]}"
+        return sources.FEEDS[slug](), None
     except Exception as e:
-        return None, str(e)[:120]
+        return None, f"{type(e).__name__}: {e}"[:160]
 
 class H(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
