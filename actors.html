@@ -18,16 +18,18 @@ a{color:var(--acc);text-decoration:none}
 .price{color:#5fd38a;font-weight:600}
 .cat{background:#1d2740;padding:2px 8px;border-radius:6px;color:#9db4ff}
 .btn{display:inline-block;margin-top:6px;background:var(--acc);color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;text-align:center}
+.btn2{display:inline-block;margin-top:6px;background:transparent;border:1px solid #2a3550;color:var(--mut);padding:6px 10px;border-radius:8px;font-size:12px;text-align:center}
 footer{text-align:center;color:var(--mut);padding:32px;font-size:13px}
 </style></head>
 <body>
 <header>
 <h1>NosytLabs — Data Actors</h1>
 <div class="sub">Ready-to-run Apify actors for crypto markets, DeFi, on-chain intel &amp; prediction data.
-Each run returns clean JSON you can pipe into dashboards, bots, or OMA-AI.</div>
+Each run returns clean JSON you can pipe into dashboards, bots, or OMA-AI.
+<a href="/actors/api" style="color:var(--acc)">View the JSON API →</a></div>
 </header>
 <div class="wrap" id="grid"><p style="color:var(--mut)">loading…</p></div>
-<footer>Part of the NosytLabs / OMA-AI stack. Self-hosted feed proxy · <a href="/api">JSON API</a></footer>
+<footer>Part of the NosytLabs / OMA-AI stack. Self-hosted feed proxy · <a href="/actors/api">JSON API</a> · <a href="https://github.com/FrankieMolt/nosytlabs-data-actors" target="_blank" rel="noopener">GitHub</a></footer>
 <script>
 const A=[
  ["coingecko-market-data","CoinGecko Market Data","Live market cap, trending, categories, exchange volumes & global metrics.","$0.35","AI · DEV"],
@@ -42,11 +44,13 @@ const A=[
 const grid=document.getElementById('grid');
 grid.innerHTML='';
 for(const[slug,name,desc,price,cat]of A){
- const url="https://apify.com/nosytlabs/"+slug;
+ const store="https://apify.com/nosytlabs/"+slug;
+ const live="https://lethometry.com/actors/api/"+slug;
  grid.insertAdjacentHTML('beforeend',
   '<div class="card"><h3>'+name+'</h3><p>'+desc+'</p>'+
   '<div class="meta"><span class="price">'+price+'/run</span><span class="cat">'+cat+'</span></div>'+
-  '<a class="btn" href="'+url+'" target="_blank" rel="noopener">Open in Apify Store →</a></div>');
+  '<a class="btn" href="'+store+'" target="_blank" rel="noopener">Open in Apify Store →</a>'+
+  '<a class="btn2" href="'+live+'" target="_blank" rel="noopener">Live preview feed</a></div>');
 }
 </script>
 </body></html>
