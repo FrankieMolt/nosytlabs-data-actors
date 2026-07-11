@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NosytLabs — Apify Data Actors</title>
+<meta name="description" content="Ready-to-run Apify actors for crypto markets, DeFi, on-chain intel and prediction-market data. Clean JSON per run.">
+<style>
+:root{--bg:#0b0e14;--fg:#e6e6e6;--mut:#8b93a7;--acc:#5b8cff;--card:#141925}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+header{padding:48px 24px 24px;text-align:center}
+h1{margin:0 0 8px;font-size:30px}
+.sub{color:var(--mut);max-width:640px;margin:0 auto}
+a{color:var(--acc);text-decoration:none}
+.wrap{max-width:980px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid #222a3a;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:17px}
+.card p{margin:0;color:var(--mut);font-size:13px;flex:1}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mut)}
+.price{color:#5fd38a;font-weight:600}
+.cat{background:#1d2740;padding:2px 8px;border-radius:6px;color:#9db4ff}
+.btn{display:inline-block;margin-top:6px;background:var(--acc);color:#fff;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;text-align:center}
+footer{text-align:center;color:var(--mut);padding:32px;font-size:13px}
+</style></head>
+<body>
+<header>
+<h1>NosytLabs — Data Actors</h1>
+<div class="sub">Ready-to-run Apify actors for crypto markets, DeFi, on-chain intel &amp; prediction data.
+Each run returns clean JSON you can pipe into dashboards, bots, or OMA-AI.</div>
+</header>
+<div class="wrap" id="grid"><p style="color:var(--mut)">loading…</p></div>
+<footer>Part of the NosytLabs / OMA-AI stack. Self-hosted feed proxy · <a href="/api">JSON API</a></footer>
+<script>
+const A=[
+ ["coingecko-market-data","CoinGecko Market Data","Live market cap, trending, categories, exchange volumes & global metrics.","$0.35","AI · DEV"],
+ ["crypto-fear-greed-index","Crypto Fear & Greed Index","Real-time & historical F&G index (0-100) from alternative.me.","$0.25","AI · DEV"],
+ ["crypto-news-aggregator","Crypto News Aggregator","Deduplicated CoinDesk / Cointelegraph / CryptoSlate RSS.","$0.30","NEWS · AUTO"],
+ ["base-mempool-monitor","Base Mempool Monitor","Pending tx, gas & block activity via QuickNode RPC.","$0.40","AI · DEV"],
+ ["defi-llama-yields","DeFiLlama Yields","APY, TVL, protocol & risk tier across chains.","$0.35","AI · DEV"],
+ ["defi-tvl-monitor","DeFi TVL Monitor","Protocol TVL, 24h/7d change & chain split.","$0.35","AI · DEV"],
+ ["ethereum-gas-tracker","Ethereum Gas Tracker","Live ETH/Base/Arbitrum gwei via Etherscan.","$0.25","AI · DEV"],
+ ["polymarket-data","Polymarket Data","Markets, odds, volume & events.","$0.30","AI · NEWS"]
+];
+const grid=document.getElementById('grid');
+grid.innerHTML='';
+for(const[slug,name,desc,price,cat]of A){
+ const url="https://apify.com/nosytlabs/"+slug;
+ grid.insertAdjacentHTML('beforeend',
+  '<div class="card"><h3>'+name+'</h3><p>'+desc+'</p>'+
+  '<div class="meta"><span class="price">'+price+'/run</span><span class="cat">'+cat+'</span></div>'+
+  '<a class="btn" href="'+url+'" target="_blank" rel="noopener">Open in Apify Store →</a></div>');
+}
+</script>
+</body></html>
