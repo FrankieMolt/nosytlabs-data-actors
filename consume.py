@@ -54,7 +54,10 @@ def main():
         f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ok={data.get('ok')} "
                 f"fail={data.get('failed')} bytes={len(json.dumps(data))} "
                 f"took={time.time()-t0:.1f}s\n")
-    print(json.dumps(digest, indent=1))
+    # silent on success: no_agent cron delivers stdout to Telegram.
+    # write digest to file instead; only print on failure.
+    with open(os.path.join(os.path.dirname(__file__), "last_digest.json"), "w") as f:
+        json.dump(digest, f, indent=1)
     return 0
 
 if __name__ == "__main__":
