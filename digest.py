@@ -33,17 +33,21 @@ def summarize(snap):
             "note": f"Sentiment: {val} ({cls})"
         })
 
-    # Gas (per-chain records)
+    # Gas (per-chain records — chains depend on what the actor returns)
     gas = feeds.get("ethereum-gas-tracker", {}).get("data")
     if gas and isinstance(gas, list) and gas:
         by = {g.get("chain"): g for g in gas}
         def gw(ch):
             g = by.get(ch)
             return round(g.get("fast_gwei"), 2) if g and g.get("fast_gwei") is not None else None
+        parts = []
+        for ch in ("ethereum", "base", "arbitrum", "polygon", "optimism"):
+            v = gw(ch)
+            if v is not None:
+                parts.append(f"{ch[:3].upper()}:{v}")
         out["signals"].append({
-            "signal": "gas", "eth": gw("ethereum"), "base": gw("base"),
-            "arbitrum": gw("arbitrum"),
-            "note": f"Gas gwei — ETH:{gw('ethereum')} BASE:{gw('base')} ARB:{gw('arbitrum')}"
+            "signal": "gas", "chains": {c: gw(c) for c in by},
+            "note": "Gas gwei — " + (" ".join(parts) if parts else "no data")
         })
 
     # CoinGecko global

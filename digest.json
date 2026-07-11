@@ -1,5 +1,5 @@
 {
- "generated_at": 1783807686,
+ "generated_at": 1783808074,
  "signals": [
   {
    "signal": "fear_greed",
@@ -9,10 +9,11 @@
   },
   {
    "signal": "gas",
-   "eth": 0.36,
-   "base": 0,
-   "arbitrum": null,
-   "note": "Gas gwei \u2014 ETH:0.36 BASE:0 ARB:None"
+   "chains": {
+    "ethereum": 0.36,
+    "base": 0
+   },
+   "note": "Gas gwei \u2014 ETH:0.36 BAS:0"
   },
   {
    "signal": "global_mcap_usd",

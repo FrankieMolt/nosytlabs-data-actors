@@ -1,0 +1,15 @@
+[Unit]
+Description=NosytLabs OMA-AI Actor Feed Proxy
+After=network.target cloudflared-nosytlabs.service
+Requires=cloudflared-nosytlabs.service
+
+[Service]
+Type=simple
+User=oldpc
+WorkingDirectory=/home/oldpc/omai_feeds
+ExecStart=/usr/bin/python3 /home/oldpc/omai_feeds/server.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
