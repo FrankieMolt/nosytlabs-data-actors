@@ -1,42 +1,50 @@
-# NosytLabs Apify Actors — Social + Repo Copy
+# NosytLabs Apify Actors — Ready-to-Post Copy
 
-## X / Twitter (post 1 — main)
-NosytLabs just shipped 8 production-grade crypto/data actors on @apify.
+All links are live. Apify Store URLs are the conversion path (pay-per-run).
+Live demo feeds prove the actors work: https://lethometry.com/actors
 
-Live market data, on-chain signals, and prediction markets — all pay-per-run, no API keys to babysit.
+---
 
-Browse + run: https://lethometry.com/actors
+## X / Twitter — Thread (post 1/3)
+NosytLabs just shipped 8 production-grade crypto & DeFi data actors on @apify.
 
-#crypto #web3 #data #automation
+Live market data, on-chain signals, and prediction markets — pay only per run.
+Try the live feeds (no API key): https://lethometry.com/actors
 
-## X / Twitter (post 2 — thread reply, feature detail)
-What's inside:
-• CoinGecko market data (21+ global markets)
-• Crypto Fear & Greed Index (real-time sentiment)
-• Polymarket prediction markets
-• Base mempool monitor (pending tx + gas)
-• DeFiLlama yields + TVL
-• Ethereum gas tracker (ETH/Base/Arbitrum)
-• Crypto news aggregator
+Store: https://apify.com/nosytlabs
 
-One endpoint each, JSON, ready for your pipeline.
+## X — Post 2/3 (the actors)
+🪙 CoinGecko Market Data — $0.35/run
+😬 Crypto Fear & Greed Index — $0.25/run
+📰 Crypto News Aggregator — $0.30/run
+⛓️ Base Mempool Monitor — $0.40/run
+💰 DeFiLlama Yields — $0.35/run
+📊 DeFi TVL Monitor — $0.35/run
+⛽ Ethereum Gas Tracker — $0.25/run
+🎯 Polymarket Data — $0.30/run
 
-## X / Twitter (post 3 — for devs / OMA-AI)
-Building an agent? Every actor has a live JSON feed:
-https://lethometry.com/actors/api/<actor>
+All here → https://apify.com/nosytlabs
 
-Drop it into n8n, a cron, or your own model. OMA-AI pulls these directly.
+## X — Post 3/3 (proof + CTA)
+Every actor has a live JSON feed showing real output:
+https://lethometry.com/actors/api/all
 
-## GitHub repo description (if you push the feed server)
-"NosytLabs OMA-AI data layer — Cloudflare-tunneled Apify actor landing page + live JSON feeds for crypto/on-chain/prediction-market data."
+No API key needed to preview. Pay only when you run.
+Built by @NosytLabs — feedback welcome.
 
-## GitHub README snippet
-# NosytLabs Data Actors
-Public landing page + live JSON feeds for 8 Apify actors (crypto, DeFi, on-chain, prediction markets).
+---
 
-- Landing: https://lethometry.com/actors
-- Feeds: https://lethometry.com/actors/api/<actor>  (e.g. /actors/api/coingecko-market-data)
-- Aggregated: https://lethometry.com/actors/api/all
-- Source: omai_feeds/server.py (stdlib-only, systemd-managed on oldpc)
+## GitHub — Repo description / About
+"NosytLabs Apify actors: 8 crypto/DeFi/on-chain/prediction-market data actors. Live JSON feeds + pay-per-run. Landing page + OMA-AI consumer."
 
-Self-host: `python3 server.py` (needs APIFY_TOKEN in env for live pulls).
+## GitHub — First issue / discussion (optional)
+Title: "Which actor should we build next?"
+Body: We ship crypto/DeFi data actors. What sources do you need scraped? Drop requests.
+
+---
+
+## LinkedIn (optional)
+NosytLabs has launched a suite of 8 Apify actors covering crypto market data,
+DeFi yields/TVL, Base on-chain mempool, Ethereum gas, and Polymarket prediction
+markets. Pay-per-run pricing, live JSON feeds for preview. Explore:
+https://apify.com/nosytlabs — demos: https://lethometry.com/actors
