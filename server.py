@@ -58,11 +58,20 @@ def get_feed(slug):
     Live data comes from direct free sources (sources.FEEDS). This is
     always real and costs nothing. The Apify actors are a separate paid
     wrapper and are NOT required for the feed to function.
+
+    Results are cached per-feed (CACHE_TTL) so we don't hammer the
+    free upstreams on every page load / poll.
     """
     if slug not in sources.FEEDS:
         return None, "unknown feed slug"
+    with CACHE_LOCK:
+        if slug in CACHE and time.time() - CACHE[slug][1] < CACHE_TTL:
+            return CACHE[slug][0], None
     try:
-        return sources.FEEDS[slug](), None
+        data = sources.FEEDS[slug]()
+        with CACHE_LOCK:
+            CACHE[slug] = (data, time.time())
+        return data, None
     except Exception as e:
         return None, f"{type(e).__name__}: {e}"[:160]
 
