@@ -1,50 +1,62 @@
-# NosytLabs Apify Actors — Ready-to-Post Copy
+# NosytLabs — Crypto Data Feeds: Ready-to-Post Copy
 
-All links are live. Apify Store URLs are the conversion path (pay-per-run).
-Live demo feeds prove the actors work: https://lethometry.com/actors
+**What this actually is:** a set of **free, live JSON crypto/DeFi/on-chain/prediction
+feeds** served from direct public APIs (no API key, no account). Optional
+[Apify actors](https://apify.com/nosytlabs) mirror these as pay-per-run automation
+— but paid Apify runs require an Apify **plan upgrade** (the account is currently
+FREE, which blocks paid runs).
+
+**Lead with the free feeds. Apify is the optional paid wrapper.**
+
+Live links (all working now):
+- Landing page: https://lethometry.com/actors
+- All feeds (aggregated JSON): https://lethometry.com/actors/api/all
+- Per-feed: `https://lethometry.com/actors/api/<slug>`
+- Source: https://github.com/FrankieMolt/nosytlabs-data-actors
 
 ---
 
 ## X / Twitter — Thread (post 1/3)
-NosytLabs just shipped 8 production-grade crypto & DeFi data actors on @apify.
+NosytLabs just shipped a free, live crypto & DeFi data API 👇
 
-Live market data, on-chain signals, and prediction markets — pay only per run.
-Try the live feeds (no API key): https://lethometry.com/actors
+8 feeds — market cap, Fear & Greed, DeFi yields/TVL, on-chain gas,
+mempool, and Polymarket odds. No API key, no account.
+Try it: https://lethometry.com/actors
 
-Store: https://apify.com/nosytlabs
+## X — Post 2/3 (the feeds)
+🪙 CoinGecko Market Data
+😬 Crypto Fear & Greed Index
+📰 Crypto News (Cointelegraph RSS)
+⛓️ Base Mempool Monitor
+💰 DeFiLlama Yields
+📊 DeFi TVL Monitor
+⛽ Ethereum/Base Gas Tracker
+🎯 Polymarket Data
 
-## X — Post 2/3 (the actors)
-🪙 CoinGecko Market Data — $0.35/run
-😬 Crypto Fear & Greed Index — $0.25/run
-📰 Crypto News Aggregator — $0.30/run
-⛓️ Base Mempool Monitor — $0.40/run
-💰 DeFiLlama Yields — $0.35/run
-📊 DeFi TVL Monitor — $0.35/run
-⛽ Ethereum Gas Tracker — $0.25/run
-🎯 Polymarket Data — $0.30/run
+All live, free, no key → https://lethometry.com/actors/api/all
 
-All here → https://apify.com/nosytlabs
-
-## X — Post 3/3 (proof + CTA)
-Every actor has a live JSON feed showing real output:
-https://lethometry.com/actors/api/all
-
-No API key needed to preview. Pay only when you run.
-Built by @NosytLabs — feedback welcome.
+## X — Post 3/3 (optional paid path + CTA)
+Want it as a scheduled Apify actor (pay-per-run automation)?
+We mirror all 8 as `nosytlabs/*` actors on Apify:
+https://apify.com/nosytlabs
+(Free live feed above works regardless.) Built by @NosytLabs.
 
 ---
 
 ## GitHub — Repo description / About
-"NosytLabs Apify actors: 8 crypto/DeFi/on-chain/prediction-market data actors. Live JSON feeds + pay-per-run. Landing page + OMA-AI consumer."
+"NosytLabs crypto data feeds: 8 free live JSON feeds (CoinGecko, Fear&Greed,
+DeFiLlama, Polymarket, on-chain gas) via direct public APIs. Optional Apify
+actors for pay-per-run. Landing page + OMA-AI consumer."
 
 ## GitHub — First issue / discussion (optional)
-Title: "Which actor should we build next?"
-Body: We ship crypto/DeFi data actors. What sources do you need scraped? Drop requests.
+Title: "Which feed should we add next?"
+Body: We ship free live crypto/DeFi data feeds. What sources do you need? Drop requests.
 
 ---
 
 ## LinkedIn (optional)
-NosytLabs has launched a suite of 8 Apify actors covering crypto market data,
-DeFi yields/TVL, Base on-chain mempool, Ethereum gas, and Polymarket prediction
-markets. Pay-per-run pricing, live JSON feeds for preview. Explore:
-https://apify.com/nosytlabs — demos: https://lethometry.com/actors
+NosytLabs has launched a suite of 8 free, live crypto/DeFi data feeds —
+market data, DeFi yields/TVL, Base on-chain mempool, Ethereum gas, and
+Polymarket prediction markets. No API key required; direct JSON from public
+sources. Explore: https://lethometry.com/actors
+(Optional pay-per-run Apify actors: https://apify.com/nosytlabs)
