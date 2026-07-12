@@ -46,7 +46,7 @@ https://apify.com/nosytlabs
 ## GitHub — Repo description / About
 "NosytLabs crypto data feeds: 8 free live JSON feeds (CoinGecko, Fear&Greed,
 DeFiLlama, Polymarket, on-chain gas) via direct public APIs. Optional Apify
-actors for pay-per-run. Landing page + OMA-AI consumer."
+actors for pay-per-run. Live-only JSON feeds (no cron/agent pipeline)."
 
 ## GitHub — First issue / discussion (optional)
 Title: "Which feed should we add next?"
