@@ -14,8 +14,8 @@ Feeds (slug): `coingecko-market-data`, `crypto-fear-greed-index`,
 `crypto-news-aggregator`, `base-mempool-monitor`, `defi-llama-yields`,
 `defi-tvl-monitor`, `ethereum-gas-tracker`, `polymarket-data`.
 
-Each feed returns **real data** pulled directly from its primary public
-source and cached for 2 hours:
+Each feed returns **real data** fetched live, on demand, directly from its
+primary public source. Responses are cached server-side for 2 hours.
 
 | Feed | Source |
 |------|--------|
@@ -33,10 +33,6 @@ source and cached for 2 hours:
 - `sources.py` — one real fetcher per feed (direct APIs, with fallbacks)
 - `server.py` — stdlib HTTP server on `:8099`; serves the landing page
   and `/actors/api/*`, proxies WordPress (`:8081`) for `/`
-- `consume.py` — writes `snapshot.json` for agent ingestion
-- `digest.py` — generates `digest.md` / `digest.json` (OMA-AI brief)
-- `run_pipeline.py` — cron entry (every 2 hours); silent on success,
-  alerts on failure / stale snapshot
 - `omai-feeds.service` — systemd unit (in repo + `/etc/systemd/system`)
 
 ## Apify actors (optional paid wrapper)
@@ -56,10 +52,6 @@ source and cached for 2 hours:
 cd omai_feeds
 python3 server.py            # serves :8099 — no token needed
 ```
+
 Run behind a Cloudflare tunnel or reverse proxy. The feed needs no
 external credentials.
-
-## OMA-AI consumer
-
-`consume.py` pulls `/actors/api/all` into `snapshot.json`. Wire it into a
-cron (every 2 hours) via `run_pipeline.py`.
