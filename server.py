@@ -86,10 +86,10 @@ class H(BaseHTTPRequestHandler):
         self.wfile.write(body)
     WP = "http://127.0.0.1:8081"
 
-    def _proxy_wp(self):
+    def _proxy_wp(self, internal_path=None):
         # proxy to WordPress on 8081, preserving Host so WP generates
         # correct absolute URLs (its siteurl is http://127.0.0.1)
-        url = self.WP + self.path
+        url = self.WP + (internal_path if internal_path else self.path)
         fwd = {k: v for k, v in self.headers.items()
                if k.lower() not in ("connection",)}
         fwd["Host"] = "lethometry.com"
@@ -131,6 +131,10 @@ class H(BaseHTTPRequestHandler):
         if p == "/health":
             self._send(200, json.dumps({"ok": True, "actors": len(ACTORS)}))
             return
+        if p == "/site/content":
+            # expose the site's real published content (WP REST posts)
+            return self._proxy_wp(
+                "/wp-json/wp/v2/posts?per_page=20&_fields=id,date,link,title,excerpt,categories")
         if p.startswith("/actors"):
             if p in ("/actors", "/actors/"):
                 try:
