@@ -15,7 +15,7 @@ Feeds (slug): `coingecko-market-data`, `crypto-fear-greed-index`,
 `defi-tvl-monitor`, `ethereum-gas-tracker`, `polymarket-data`.
 
 Each feed returns **real data** pulled directly from its primary public
-source and cached for 10 minutes:
+source and cached for 2 hours:
 
 | Feed | Source |
 |------|--------|
@@ -35,7 +35,7 @@ source and cached for 10 minutes:
   and `/actors/api/*`, proxies WordPress (`:8081`) for `/`
 - `consume.py` — writes `snapshot.json` for agent ingestion
 - `digest.py` — generates `digest.md` / `digest.json` (OMA-AI brief)
-- `run_pipeline.py` — cron entry (every 30 min); silent on success,
+- `run_pipeline.py` — cron entry (every 2 hours); silent on success,
   alerts on failure / stale snapshot
 - `omai-feeds.service` — systemd unit (in repo + `/etc/systemd/system`)
 
@@ -62,4 +62,4 @@ external credentials.
 ## OMA-AI consumer
 
 `consume.py` pulls `/actors/api/all` into `snapshot.json`. Wire it into a
-cron (every 30 min) via `run_pipeline.py`.
+cron (every 2 hours) via `run_pipeline.py`.

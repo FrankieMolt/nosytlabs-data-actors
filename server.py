@@ -41,7 +41,7 @@ ACTORS = {
 }
 
 CACHE = {}
-CACHE_TTL = 600  # 10 min
+CACHE_TTL = 7200  # 2 hours
 CACHE_LOCK = threading.Lock()
 
 STORE = "https://apify.com/nosytlabs/"

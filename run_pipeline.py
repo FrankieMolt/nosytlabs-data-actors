@@ -11,7 +11,7 @@ import subprocess, sys, os, json, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 OMAI = os.path.join(os.path.expanduser("~"), "omai_feeds")
 SNAP = os.path.join(OMAI, "snapshot.json")
-STALE_SECS = 3600  # alert if no fresh successful run in 1h (2x 30m interval)
+STALE_SECS = 14400  # alert if no fresh successful run in 4h (2x 2h interval)
 
 def run(script):
     path = os.path.join(OMAI, script)
