@@ -186,6 +186,6 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", 8099))
-    srv = ThreadingHTTPServer(("0.0.0.0", PORT), H)
+    srv = ThreadingHTTPServer(("127.0.0.1", PORT), H)
     print(f"omai_feeds on :{PORT}  token={'set' if TOKEN else 'MISSING'}")
     srv.serve_forever()
