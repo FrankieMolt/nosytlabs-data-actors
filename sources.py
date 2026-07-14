@@ -106,10 +106,18 @@ def mempool():
 
 @_cached()
 def defi_yields():
-    d = _get("https://yields.llama.fi/pools?limit=200")["data"]
-    # real, sensible yields: TVL > $1M, APY in a sane 1–1000% band
+    # DeFiLlama yields API (current path). Shape: {"data": [ {chain, project,
+    # symbol, tvlUsd, apy, ...}, ... ]}. Older /pools?limit= endpoint was retired.
+    try:
+        resp = _get("https://yields.llama.fi/yields/pools")
+    except Exception as e:
+        return {"error": f"upstream_unavailable: {type(e).__name__}"}
+    pools = resp.get("data") if isinstance(resp, dict) else None
+    if not isinstance(pools, list) or not pools:
+        return {"error": "upstream_empty"}
+    # real, sensible yields: TVL > $1M, APY in a sane 1-1000% band
     # (excludes 900k% outlier garbage pools)
-    real = [p for p in d if (p.get("tvlUsd") or 0) > 1_000_000
+    real = [p for p in pools if (p.get("tvlUsd") or 0) > 1_000_000
             and 1 <= (p.get("apy") or 0) <= 1000]
     top = sorted(real, key=lambda x: x.get("apy") or 0, reverse=True)[:10]
     return {"top_yields": [{"chain": p["chain"], "project": p["project"],

@@ -171,7 +171,8 @@ class H(BaseHTTPRequestHandler):
                     return
                 data, err = get_feed(slug)
                 if err:
-                    self._send(502, json.dumps({"error": err}))
+                    self._send(200, json.dumps({"actor": slug, "ok": False,
+                                                "error": err}))
                 else:
                     self._send(200, json.dumps({"actor": slug,
                         "count": len(data) if isinstance(data, list) else 1,
